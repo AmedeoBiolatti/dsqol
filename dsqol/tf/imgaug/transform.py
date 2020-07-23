@@ -3,7 +3,7 @@ from tensorflow.keras import backend as K
 import math
 
 
-def get_mat(rotation, shear, height_zoom, width_zoom, height_shift, width_shift):
+def _get_mat(rotation, shear, height_zoom, width_zoom, height_shift, width_shift):
     # returns 3x3 transformmatrix which transforms indicies
 
     # CONVERT DEGREES TO RADIANS
@@ -64,7 +64,7 @@ def Transform(
         w_shift = wshift_mult * tf.random.normal([1], dtype='float32')
 
         # GET TRANSFORMATION MATRIX
-        m = get_mat(rot, shr, h_zoom, w_zoom, h_shift, w_shift)
+        m = _get_mat(rot, shr, h_zoom, w_zoom, h_shift, w_shift)
 
         # LIST DESTINATION PIXEL INDICES
         x = tf.repeat(tf.range(dim // 2, -dim // 2, -1), dim)
@@ -78,7 +78,7 @@ def Transform(
         idx2 = K.clip(idx2, -dim // 2 + XDIM + 1, dim // 2)
 
         # FIND ORIGIN PIXEL VALUES
-        idx3 = tf.stack([dim // 2 - idx2[0,], dim // 2 - 1 + idx2[1,]])
+        idx3 = tf.stack([dim // 2 - idx2[0, ], dim // 2 - 1 + idx2[1, ]])
         d = tf.gather_nd(image, tf.transpose(idx3))
 
         return tf.reshape(d, [dim, dim, 3])

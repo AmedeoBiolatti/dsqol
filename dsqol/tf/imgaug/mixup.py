@@ -4,7 +4,7 @@ import tensorflow as tf
 def Mixup(dim, batch_size, probability=1.0):
     def _mixup(img, lab):
         DIM = dim
-        imgs = [];
+        imgs = []
         labs = []
         for j in range(batch_size):
             do = tf.cast(tf.random.uniform([], 0, 1) <= probability, tf.float32)
