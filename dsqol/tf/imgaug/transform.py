@@ -1,14 +1,14 @@
 import tensorflow as tf
 from tensorflow.keras import backend as K
-import math
 
 
 def _get_mat(rotation, shear, height_zoom, width_zoom, height_shift, width_shift):
     # returns 3x3 transformmatrix which transforms indicies
 
     # CONVERT DEGREES TO RADIANS
-    rotation = math.pi * rotation / 180.
-    shear = math.pi * shear / 180.
+    PI_180 = 3.1415926535 / 180.0
+    rotation = PI_180 * rotation
+    shear = PI_180 * shear
 
     def get_3x3_mat(lst):
         return tf.reshape(tf.concat([lst], axis=0), [3, 3])
@@ -38,8 +38,7 @@ def _get_mat(rotation, shear, height_zoom, width_zoom, height_shift, width_shift
                                 zero, one, width_shift,
                                 zero, zero, one])
 
-    return K.dot(K.dot(rotation_matrix, shear_matrix),
-                 K.dot(zoom_matrix, shift_matrix))
+    return K.dot(K.dot(rotation_matrix, shear_matrix), K.dot(zoom_matrix, shift_matrix))
 
 
 def Transform(
