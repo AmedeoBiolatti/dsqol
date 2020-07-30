@@ -4,7 +4,11 @@ from tensorflow import keras
 
 def average_weights(saves: typing.List[str], decay=1.0, model: keras.Model = None) -> keras.Model:
     total_decay = decay ** 0
-    m0 = keras.models.load_model(saves[0]) if model is None else keras.models.clone_model(model).load_weights(saves[0])
+    if model is None:
+        m0 = keras.models.load_model(saves[0])
+    else:
+        m0 = keras.models.clone_model(model)
+        m0.load_weights(saves[0])
     if len(saves) > 1:
         m1 = keras.models.clone_model(m0)
         for i, save in enumerate(saves[1:]):
